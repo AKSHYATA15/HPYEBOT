@@ -12,8 +12,8 @@ import pandas as pd
 
 @st.cache_data
 def load_data():
-    df = pd.read_excel("data/instagram_data.xlsx", sheet_name=0)
-    yt = pd.read_excel("data/instagram_data.xlsx", sheet_name=1)
+    df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
+    yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
     yt = yt.rename(columns={"USERNAME": "username"})
     df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
 
