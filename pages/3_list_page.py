@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-# Custom CSS styling for both list and popover
+# Set page config must be FIRST command
+st.set_page_config(page_title="Influencer List", layout="wide")
+
 st.markdown("""
 <style>
     .header {
@@ -44,30 +46,38 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Then load your data and other components
 @st.cache_data
 def load_data():
     # Load Instagram data
     df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
-    
+
     # Load YouTube data
     yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
     yt = yt.rename(columns={"instagram_username": "username"})
-    
-    # Merge data
-    df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
-                          "youtube_profile_image", "top_video_link", "top_video_views"]], 
-                  on="username", how="left")
-    
-    # Calculate influencer type
+
+    # Merge YouTube with Instagram on username
+    df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
+
+    # Calculate max audience
     df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
-    df["Influencer_Type"] = df["max_audience"].apply(
-        lambda x: "Nano" if x < 10_000 else
-                  "Micro" if x < 100_000 else
-                  "Mid-Tier" if x < 500_000 else
-                  "Macro" if x < 1_000_000 else
-                  "Mega" if x < 5_000_000 else
-                  "Celebrity"
-    )
+
+    # Classify influencer type
+    def classify_influencer(count):
+        if count < 10_000:
+            return "Nano"
+        elif count < 100_000:
+            return "Micro"
+        elif count < 500_000:
+            return "Mid-Tier"
+        elif count < 1_000_000:
+            return "Macro"
+        elif count < 5_000_000:
+            return "Mega"
+        else:
+            return "Celebrity"
+
+    df["Influencer_Type"] = df["max_audience"].apply(classify_influencer)
     return df[df["status"] == "Success"]
 
 df = load_data()
@@ -80,7 +90,8 @@ if not niche or not infl_type:
     st.warning("Please select both a Niche and Influencer Type.")
     st.stop()
 
-st.set_page_config(page_title="Influencer List", layout="wide")
+
+
 st.title(f"📋 Influencers - {niche} | {infl_type}")
 
 # Apply filters
