@@ -21,4 +21,4 @@ Use the menu on the left to begin your journey.
 """)
 
 if st.button("🚀 Start Exploring"):
-    st.switch_page("pages/2_Search_Page.py")
+    st.switch_page("pages/2_search_page.py")
