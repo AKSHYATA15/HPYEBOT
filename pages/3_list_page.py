@@ -57,7 +57,8 @@ else:
         cols = st.columns([1, 3, 2, 2, 2])
         with cols[0]:
             image_url = row.get("profile_pic_url")
-            
+            profile_url = f"https://instagram.com/{row['username']}"
+
             if pd.notna(image_url) and pd.notna(profile_url):
                 st.markdown(f"[![profile]({image_url})]({profile_url})", unsafe_allow_html=True)
             else:
