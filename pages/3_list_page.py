@@ -17,7 +17,7 @@ def load_data():
 
     # Load YouTube data
     yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
-
+    yt = yt.rename(columns={"instagram_username": "username"})
      # Perform left merge to keep all Instagram users
     df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
 
