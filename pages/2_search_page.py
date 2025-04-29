@@ -60,6 +60,6 @@ if "selected_niche" in st.session_state:
         with type_cols[i % 4]:
             if st.button(infl_type):
                 st.session_state["selected_category"] = infl_type
-                st.switch_page("pages/3_List_Page.py")
+                st.switch_page("pages/3_list_page.py")
 else:
     st.info("Please select a Niche first.")
