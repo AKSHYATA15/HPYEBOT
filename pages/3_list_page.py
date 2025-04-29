@@ -13,34 +13,11 @@ import pandas as pd
 @st.cache_data
 def load_data():
     # Load Instagram data
-    df = pd.read_excel("data/instagram_data.xlsx", sheet_name=0)
+    df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
 
     # Load YouTube data
-    yt = pd.read_excel("data/instagram_data.xlsx", sheet_name=1)
-    yt = yt.rename(columns={"USERNAME": "username"})
-
-    # Perform left merge to keep all Instagram users
-    df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
-
-    # Calculate max audience (using followers if no YouTube data)
-    df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
-
-    def classify_influencer(count):
-        if count < 10_000:
-            return "Nano"
-        elif count < 100_000:
-            return "Micro"
-        elif count < 500_000:
-            return "Mid-Tier"
-        elif count < 1_000_000:
-            return "Macro"
-        elif count < 5_000_000:
-            return "Mega"
-        else:
-            return "Celebrity"
-
-    df["Influencer_Type"] = df["max_audience"].apply(classify_influencer)
-    return df[df["status"] == "Success"]
+    yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
+   
 
 df = load_data()
 
