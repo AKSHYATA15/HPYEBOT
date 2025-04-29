@@ -11,7 +11,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Influencer Discovery", layout="wide")
 
-st.image("assets/homepage_banner.jpg", use_column_width=True)
+st.image("assets/HOMEPAGE.jpg", use_column_width=True)
 
 st.markdown("""
 # Welcome to Influencer Discovery 🔍
