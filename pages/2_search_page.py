@@ -14,7 +14,7 @@ import pandas as pd
 def load_data():
     df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
     yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
-    yt = yt.rename(columns={"USERNAME": "username"})
+    yt = yt.rename(columns={"instagram_username": "username"})
     df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
 
     df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
