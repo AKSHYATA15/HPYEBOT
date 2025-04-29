@@ -3,60 +3,77 @@ import pandas as pd
 
 @st.cache_data
 def load_data():
+    # Load Instagram data
     df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
+
+    # Load YouTube data
     yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
     yt = yt.rename(columns={"instagram_username": "username"})
-    df = pd.merge(df, yt[["username", "subscribers", "video_views"]], on="username", how="left")
+    
+    df = pd.merge(df, yt[["username", "subscribers"]], on="username", how="left")
+    df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
+
+    def classify_influencer(count):
+        if count < 10_000:
+            return "Nano"
+        elif count < 100_000:
+            return "Micro"
+        elif count < 500_000:
+            return "Mid-Tier"
+        elif count < 1_000_000:
+            return "Macro"
+        elif count < 5_000_000:
+            return "Mega"
+        else:
+            return "Celebrity"
+
+    df["Influencer_Type"] = df["max_audience"].apply(classify_influencer)
     return df[df["status"] == "Success"]
 
 df = load_data()
 
-# 🔑 Get the username from query params
-query_params = st.query_params if hasattr(st, 'query_params') else st.experimental_get_query_params()
+# Set page config
+st.set_page_config(page_title="Influencer Dashboard", layout="wide")
+
+# Read URL parameters
+query_params = st.query_params
 username = query_params.get("username", [None])[0]
+niche = query_params.get("niche", [None])[0]
+infl_type = query_params.get("influencer_type", [None])[0]
 
+# Validation
 if not username:
-    st.error("No influencer selected. Please go back to the list.")
+    st.error("No influencer selected.")
     st.stop()
 
-user = df[df["username"] == username]
-if user.empty:
-    st.error("Influencer not found.")
+# Filter for the influencer
+influencer_data = df[df["username"] == username]
+
+if influencer_data.empty:
+    st.warning("Influencer not found.")
     st.stop()
 
-# ---- DASHBOARD UI ----
-st.set_page_config(page_title=f"{username} Dashboard", layout="wide")
-st.title(f"📊 {username} Dashboard")
+# Extract first row
+row = influencer_data.iloc[0]
 
-row = user.iloc[0]
-col1, col2 = st.columns([1, 3])
+# Header
+st.title(f"📊 {row['username']}'s Dashboard")
 
-with col1:
+# Profile picture and basic info
+cols = st.columns([1, 3, 2])
+with cols[0]:
     if pd.notna(row["profile_pic_url"]):
-        st.image(row["profile_pic_url"], width=120)
+        st.image(row["profile_pic_url"], width=100)
     else:
-        st.image("https://via.placeholder.com/120", width=120)
+        st.image("https://via.placeholder.com/100", width=100)
 
-with col2:
-    st.markdown(f"**Bio:** {row['bio']}")
-    st.markdown(f"**Niche:** {row['Niche']}")
+with cols[1]:
+    st.markdown(f"**Niche**: {row['Niche']}")
+    st.markdown(f"**Type**: {row['Influencer_Type']}")
 
-st.markdown("---")
-st.subheader("📱 Instagram Metrics")
-st.metric("Followers", f"{int(row['followers']):,}")
-st.metric("Posts", f"{int(row['posts_count'])}" if not pd.isna(row['posts_count']) else "N/A")
+with cols[2]:
+    st.metric("Instagram Followers", f"{int(row['followers']):,}" if not pd.isna(row['followers']) else "N/A")
+    if pd.notna(row['subscribers']):
+        st.metric("YouTube Subscribers", f"{int(row['subscribers']):,}")
 
-if not pd.isna(row.get("engagement")):
-    st.metric("Engagement Rate", f"{row['engagement']:.2f}%")
-else:
-    # You can also calculate engagement rate from likes/comments if data available
-    st.write("Engagement Rate: N/A")
-
-st.markdown("---")
-st.subheader("▶️ YouTube Metrics")
-if pd.notna(row["subscribers"]):
-    st.metric("Subscribers", f"{int(row['subscribers']):,}")
-    if pd.notna(row.get("video_views")):
-        st.metric("Total Views", f"{int(row['video_views']):,}")
-else:
-    st.write("No YouTube data available.")
+# You can continue adding more visualizations and metrics below...
