@@ -78,7 +78,6 @@ else:
 
         with cols[4]:
             st.write(f"**{row['Niche']}**")
-            st.markdown(f"[📊 View Dashboard](?username={row['username']}&niche={row['Niche']}&influencer_type={row['Influencer_Type']})"
-)
+            st.markdown(f"[📊 View Dashboard](?username={row['username']}&niche={row['Niche']}&influencer_type={row['Influencer_Type']})")
 
         st.divider()
