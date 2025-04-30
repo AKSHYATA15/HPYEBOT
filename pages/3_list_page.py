@@ -239,5 +239,43 @@ else:
                             
                         else:
                             st.info("No YouTube data available for this influencer")
+        with cols[5]:
+            st.write(f"**{row['Niche']}**")
+            
+            # Message Them button
+            if st.button("💬 Message Them", key=f"message_{row['username']}"):
+                with st.popover(f"Send DM to @{row['username']} on Instagram", use_container_width=True):
+                    with st.form(key=f"dm_form_{row['username']}"):
+                        insta_username = st.text_input("Your Instagram Username")
+                        insta_password = st.text_input("Your Instagram Password", type="password")
+                        message = st.text_area("Message to send", value=f"Hi @{row['username']}, ")
+                        send_button = st.form_submit_button("Send Message")
+                        
+                        if send_button:
+                            try:
+                                # Initialize client with human-like delays
+                                cl = Client()
+                                cl.delay_range = [2, 5]
+                                
+                                # Login
+                                with st.spinner("Logging in..."):
+                                    cl.login(insta_username, insta_password)
+                                    st.success("✅ Login successful")
+                                
+                                # Send DM
+                                with st.spinner("Sending message..."):
+                                    user_id = cl.user_id_from_username(row['username'])
+                                    time.sleep(random.uniform(2.0, 4.0))
+                                    cl.direct_send(message, [user_id])
+                                    st.success(f"✅ Message sent to @{row['username']}")
+                                
+                                # Logout
+                                cl.logout()
+                            
+                            except Exception as e:
+                                st.error(f"❌ Failed to send message: {str(e)}")
+                                st.info("Note: Instagram may temporarily block automated actions. Try again later.")
+
+        
 
         st.divider()
