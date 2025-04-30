@@ -217,10 +217,12 @@ else:
                         # YouTube Metrics (only if data exists)
                         if pd.notna(row.get('subscribers')):
                             st.subheader("YouTube Analytics")
-                            
-                            # Add YouTube Profile Link if available
+
                             if pd.notna(row.get('profile_link')):
                                 st.markdown(f"**YouTube Channel:** [View Profile]({row['profile_link']})")
+                            else:
+                                st.markdown("**YouTube Channel:** Link not available")
+                            
                             
                             # YouTube metrics in columns
                             cols = st.columns(3)
@@ -231,11 +233,13 @@ else:
                             with cols[2]:
                                 # Calculate YouTube engagement percentage
                                 try:
-                                    yt_engagement = (row['total_views'] / row['subscribers']) * 100
-                                    st.metric("Engagement %", f"{min(yt_engagement, 100):.2f}%") 
-                                    
+                                    # NEW: Average views per video (assuming 30 videos)
+                                    avg_views_per_video = row['total_views'] / 30 
+                                    # NEW: Engagement as % of subscribers watching average video
+                                    meaningful_engagement = (avg_views_per_video / row['subscribers']) * 100
+                                    st.metric("View Rate", f"{min(meaningful_engagement, 100):.2f}%", help="Avg video views as % of subscribers")
                                 except:
-                                    st.metric("Engagement %", "N/A")
+                                    st.metric("View Rate", "N/A")
                             
                             # Top video section
                             st.markdown("**Top Performing Video**")
