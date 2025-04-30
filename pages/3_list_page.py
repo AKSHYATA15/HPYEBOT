@@ -46,56 +46,59 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-@st.cache_data
 def load_data():
-    # Load Instagram data
-    df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
-
-    # Load YouTube data
     try:
-        yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
-        yt = yt.rename(columns={"instagram_username": "username"})
+        # Load Instagram data
+        df = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=0)
         
-        # Merge only if YouTube data exists
-        df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
-                             "youtube_profile_image", "top_video_link", "top_video_views", "profile_link"]], 
-                     on="username", how="left")
-    except:
-        # If YouTube data doesn't exist, add empty columns
-        df["subscribers"] = None
-        df["total_views"] = None
-        df["youtube_name"] = None
-        df["youtube_profile_image"] = None
-        df["top_video_link"] = None
-        df["top_video_views"] = None
-        df["profile_link"] = None
+        # Load YouTube data - added more robust error handling
+        try:
+            yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
+            yt = yt.rename(columns={"instagram_username": "username"})
+            
+            # Print debug info to check YouTube data
+            st.write("YouTube data columns:", yt.columns.tolist())
+            
+            # Merge YouTube data
+            df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
+                                 "youtube_profile_image", "top_video_link", "top_video_views"]], 
+                         on="username", how="left")
+            
+            # Print debug info to check merged data
+            st.write("Merged data sample:", df[["username", "subscribers"]].head())
+            
+        except Exception as e:
+            st.warning(f"Could not load YouTube data: {str(e)}")
+            # Add empty YouTube columns if merge fails
+            df["subscribers"] = None
+            df["total_views"] = None
+            df["youtube_name"] = None
+            df["youtube_profile_image"] = None
+            df["top_video_link"] = None
+            df["top_video_views"] = None
+            
+        # Calculate max audience
+        df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
         
-    # Calculate max audience with fallback to followers if subscribers is None
-    df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
-    
-    # Fill any remaining NaN values in max_audience with 0
-    df["max_audience"] = df["max_audience"].fillna(0)
+        # Classify influencer type with proper error handling
+        def classify_influencer(count):
+            try:
+                count = float(count) if not pd.isna(count) else 0
+                if count < 10_000: return "Nano"
+                elif count < 100_000: return "Micro"
+                elif count < 500_000: return "Mid-Tier"
+                elif count < 1_000_000: return "Macro"
+                elif count < 5_000_000: return "Mega"
+                else: return "Celebrity"
+            except:
+                return "Unknown"
 
-    # Classify influencer type with NaN handling
-    def classify_influencer(count):
-        if pd.isna(count):
-            return "Unknown"
-        if count < 10_000:
-            return "Nano"
-        elif count < 100_000:
-            return "Micro"
-        elif count < 500_000:
-            return "Mid-Tier"
-        elif count < 1_000_000:
-            return "Macro"
-        elif count < 5_000_000:
-            return "Mega"
-        else:
-            return "Celebrity"
-
-    df["Influencer_Type"] = df["max_audience"].apply(classify_influencer)
-    return df[df["status"] == "Success"]
-
+        df["Influencer_Type"] = df["max_audience"].apply(classify_influencer)
+        return df[df["status"] == "Success"]
+        
+    except Exception as e:
+        st.error(f"Failed to load data: {str(e)}")
+        return pd.DataFrame()
 df = load_data()
 
 # Get filters from session state
