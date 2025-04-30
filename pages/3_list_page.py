@@ -70,11 +70,16 @@ def load_data():
         df["top_video_views"] = None
         df["profile_link"] = None
         
-    # Calculate max audience
+    # Calculate max audience with fallback to followers if subscribers is None
     df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
+    
+    # Fill any remaining NaN values in max_audience with 0
+    df["max_audience"] = df["max_audience"].fillna(0)
 
-    # Classify influencer type
+    # Classify influencer type with NaN handling
     def classify_influencer(count):
+        if pd.isna(count):
+            return "Unknown"
         if count < 10_000:
             return "Nano"
         elif count < 100_000:
