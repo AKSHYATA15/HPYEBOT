@@ -120,7 +120,7 @@ if filtered_df.empty:
     st.info("No influencers found for the selected criteria.")
 else:
     for _, row in filtered_df.iterrows():
-        cols = st.columns([1, 3, 2, 2, 2, 1])
+        cols = st.columns(6)
         with cols[0]:
             # Modified: Use YouTube profile image if available, otherwise Instagram
             image_url = row.get("youtube_profile_image", row.get("profile_pic_url"))
