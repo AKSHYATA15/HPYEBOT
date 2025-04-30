@@ -56,16 +56,14 @@ def load_data():
             yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
             yt = yt.rename(columns={"instagram_username": "username"})
             
-            # Print debug info to check YouTube data
-            st.write("YouTube data columns:", yt.columns.tolist())
+            
             
             # Merge YouTube data
             df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
                                  "youtube_profile_image", "top_video_link", "top_video_views"]], 
                          on="username", how="left")
             
-            # Print debug info to check merged data
-            st.write("Merged data sample:", df[["username", "subscribers"]].head())
+            
             
         except Exception as e:
             st.warning(f"Could not load YouTube data: {str(e)}")
@@ -201,13 +199,7 @@ else:
                             else:
                                 st.info("No post data available")
                         
-                        with col2:
-                            st.markdown("**Least Liked Post**")
-                            if pd.notna(row.get("least_liked_url")):
-                                st.markdown(f"[View Post]({row['least_liked_url']})")
-                                st.metric("Likes", f"{int(row['least_liked_likes']):,}")
-                            else:
-                                st.info("No post data available")
+                        
 
                     with tab2:
                         # YouTube Metrics (only if data exists)
