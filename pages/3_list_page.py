@@ -243,8 +243,8 @@ else:
                             
                         else:
                             st.info("No YouTube data available for this influencer")
-        with cols[5]:
-            st.write(f"**{row['Niche']}**")
+
+            
             
             # Message button - using a unique key per username
             if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
@@ -299,7 +299,6 @@ else:
                             except Exception as e:
                                 st.error(f"⚠️ Unexpected error: {str(e)}")
                                 st.info("Note: Instagram may limit automated actions. Try manual login first.")
-
-
+       
 
         st.divider()
