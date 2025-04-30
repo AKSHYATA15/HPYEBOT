@@ -230,16 +230,7 @@ else:
                                 st.metric("Subscribers", f"{int(row['subscribers']):,}")
                             with cols[1]:
                                 st.metric("Total Views", f"{int(row['total_views']):,}")
-                            with cols[2]:
-                                # Calculate YouTube engagement percentage
-                                try:
-                                    # NEW: Average views per video (assuming 30 videos)
-                                    avg_views_per_video = row['total_views'] / 30 
-                                    # NEW: Engagement as % of subscribers watching average video
-                                    meaningful_engagement = (avg_views_per_video / row['subscribers']) * 100
-                                    st.metric("View Rate", f"{min(meaningful_engagement, 100):.2f}%", help="Avg video views as % of subscribers")
-                                except:
-                                    st.metric("View Rate", "N/A")
+                            
                             
                             # Top video section
                             st.markdown("**Top Performing Video**")
