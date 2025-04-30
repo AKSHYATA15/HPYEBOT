@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+import time
+import random
+from instagrapi import Client
+from instagrapi.exceptions import LoginRequired, ChallengeRequired
 
 # Set page config must be FIRST command
 st.set_page_config(page_title="Influencer List", layout="wide")
@@ -242,40 +246,54 @@ else:
         with cols[5]:
             st.write(f"**{row['Niche']}**")
             
-            # Message Them button
-            if st.button("💬 Message Them", key=f"message_{row['username']}"):
-                with st.popover(f"Send DM to @{row['username']} on Instagram", use_container_width=True):
+            # Message button
+            if st.button("💬 Message", key=f"msg_{row['username']}"):
+                with st.popover(f"Send DM to @{row['username']}"):
                     with st.form(key=f"dm_form_{row['username']}"):
-                        insta_username = st.text_input("Your Instagram Username")
-                        insta_password = st.text_input("Your Instagram Password", type="password")
-                        message = st.text_area("Message to send", value=f"Hi @{row['username']}, ")
-                        send_button = st.form_submit_button("Send Message")
+                        ig_username = st.text_input("Your Instagram Username")
+                        ig_password = st.text_input("Your Instagram Password", type="password")
+                        message = st.text_area("Message", value=f"Hi @{row['username']}, ")
                         
-                        if send_button:
+                        if st.form_submit_button("Send"):
                             try:
-                                # Initialize client with human-like delays
+                                # Initialize client with human-like behavior
                                 cl = Client()
-                                cl.delay_range = [2, 5]
+                                cl.delay_range = [1, 3]  # Random delays between 1-3 seconds
                                 
                                 # Login
-                                with st.spinner("Logging in..."):
-                                    cl.login(insta_username, insta_password)
+                                try:
+                                    cl.login(ig_username, ig_password)
                                     st.success("✅ Login successful")
+                                except ChallengeRequired:
+                                    st.error("🔐 Verification required - please login via mobile first")
+                                    return
+                                except Exception as e:
+                                    st.error(f"❌ Login failed: {str(e)}")
+                                    return
                                 
-                                # Send DM
-                                with st.spinner("Sending message..."):
+                                # Get user ID
+                                try:
                                     user_id = cl.user_id_from_username(row['username'])
-                                    time.sleep(random.uniform(2.0, 4.0))
-                                    cl.direct_send(message, [user_id])
+                                    time.sleep(random.uniform(1, 2))  # Human-like delay
+                                except Exception as e:
+                                    st.error(f"❌ Couldn't find user: {str(e)}")
+                                    return
+                                
+                                # Send message
+                                try:
+                                    result = cl.direct_send(message, [user_id])
+                                    time.sleep(random.uniform(2, 4))  # Delay after sending
                                     st.success(f"✅ Message sent to @{row['username']}")
+                                    st.balloons()  # Visual confirmation
+                                except Exception as e:
+                                    st.error(f"❌ Failed to send: {str(e)}")
                                 
                                 # Logout
                                 cl.logout()
                             
                             except Exception as e:
-                                st.error(f"❌ Failed to send message: {str(e)}")
-                                st.info("Note: Instagram may temporarily block automated actions. Try again later.")
+                                st.error(f"⚠️ Unexpected error: {str(e)}")
+                                st.info("Note: Instagram may limit automated actions. Try again later.")
 
-        
 
         st.divider()
