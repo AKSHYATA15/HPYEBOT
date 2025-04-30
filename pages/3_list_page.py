@@ -46,7 +46,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Then load your data and other components
 @st.cache_data
 def load_data():
     # Load Instagram data
@@ -54,13 +53,12 @@ def load_data():
 
     # Load YouTube data
     try:
-        # Try loading YouTube data if available
         yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
         yt = yt.rename(columns={"instagram_username": "username"})
         
         # Merge only if YouTube data exists
         df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
-                             "youtube_profile_image", "top_video_link", "top_video_views"]], 
+                             "youtube_profile_image", "top_video_link", "top_video_views", "profile_link"]], 
                      on="username", how="left")
     except:
         # If YouTube data doesn't exist, add empty columns
@@ -70,6 +68,7 @@ def load_data():
         df["youtube_profile_image"] = None
         df["top_video_link"] = None
         df["top_video_views"] = None
+        df["profile_link"] = None
         
     # Calculate max audience
     df["max_audience"] = df[["followers", "subscribers"]].max(axis=1)
@@ -102,8 +101,6 @@ if not niche or not infl_type:
     st.warning("Please select both a Niche and Influencer Type.")
     st.stop()
 
-
-
 st.title(f"📋 Influencers - {niche} | {infl_type}")
 
 # Apply filters
@@ -115,7 +112,8 @@ else:
     for _, row in filtered_df.iterrows():
         cols = st.columns([1, 3, 2, 2, 2])
         with cols[0]:
-            image_url = row.get("profile_pic_url")
+            # Modified: Use YouTube profile image if available, otherwise Instagram
+            image_url = row.get("youtube_profile_image", row.get("profile_pic_url"))
             profile_url = f"https://instagram.com/{row['username']}"
 
             if pd.notna(image_url) and pd.notna(profile_url):
@@ -136,14 +134,11 @@ else:
                 st.write("No YouTube data")
 
         with cols[4]:
-            
             st.write(f"**{row['Niche']}**")
             
-            # Create a popup button for the dashboard
             if st.button("View Dashboard", key=f"view_more_{row['username']}"):
-                # Create a popup with all dashboard metrics
                 with st.popover(f"📊 {row['username']}'s Dashboard", use_container_width=True):
-                    # Determine which profile image to use in header (Instagram or YouTube)
+                    # Determine which profile image to use in header
                     header_image = None
                     if pd.notna(row.get("youtube_profile_image")):
                         header_image = row["youtube_profile_image"]
@@ -173,6 +168,10 @@ else:
                             st.metric("Verified", "Yes" if row.get('is_verified', False) else "No")
                             st.metric("Business Account", "Yes" if row.get('is_business_account', False) else "No")
                         
+                        # Instagram Profile Link
+                        insta_profile_url = f"https://instagram.com/{row['username']}"
+                        st.markdown(f"**Instagram Profile:** [@{row['username']}]({insta_profile_url})")
+                        
                         # Engagement
                         st.subheader("Engagement")
                         try:
@@ -183,22 +182,33 @@ else:
                         except:
                             st.warning("Could not calculate engagement rate")
                         
-                        # Posts
+                        # Posts - Show as links only
                         st.subheader("Top Posts")
                         col1, col2 = st.columns(2)
                         with col1:
                             st.markdown("**Most Liked Post**")
-                            st.image(row.get("most_liked_url", "https://via.placeholder.com/150"), use_column_width=True)
-                            st.caption(f"{int(row['most_liked_likes']):,} likes")
+                            if pd.notna(row.get("most_liked_url")):
+                                st.markdown(f"[View Post]({row['most_liked_url']})")
+                                st.metric("Likes", f"{int(row['most_liked_likes']):,}")
+                            else:
+                                st.info("No post data available")
+                        
                         with col2:
                             st.markdown("**Least Liked Post**")
-                            st.image(row.get("least_liked_url", "https://via.placeholder.com/150"), use_column_width=True)
-                            st.caption(f"{int(row['least_liked_likes']):,} likes")
-                    
+                            if pd.notna(row.get("least_liked_url")):
+                                st.markdown(f"[View Post]({row['least_liked_url']})")
+                                st.metric("Likes", f"{int(row['least_liked_likes']):,}")
+                            else:
+                                st.info("No post data available")
+
                     with tab2:
                         # YouTube Metrics (only if data exists)
                         if pd.notna(row.get('subscribers')):
                             st.subheader("YouTube Analytics")
+                            
+                            # Add YouTube Profile Link if available
+                            if pd.notna(row.get('profile_link')):
+                                st.markdown(f"**YouTube Channel:** [View Profile]({row['profile_link']})")
                             
                             # YouTube metrics in columns
                             cols = st.columns(3)
@@ -222,6 +232,4 @@ else:
                         else:
                             st.info("No YouTube data available for this influencer")
 
-        st.divider() 
-        
-                
+        st.divider()
