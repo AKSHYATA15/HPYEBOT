@@ -181,12 +181,24 @@ else:
                         # Engagement
                         st.subheader("Engagement")
                         try:
+                            # Get average likes from most and least liked posts
                             avg_likes = (row["most_liked_likes"] + row["least_liked_likes"]) / 2
+                            # Get average comments from most and least liked posts
                             avg_comments = (row["most_liked_comments"] + row["least_liked_comments"]) / 2
+        
+                            # Calculate engagement rate (standard industry formula)
                             eng_rate = ((avg_likes + avg_comments) / row["followers"]) * 100
-                            st.metric("Engagement Rate", f"{eng_rate:.2f}%")
-                        except:
-                            st.warning("Could not calculate engagement rate")
+        
+                            # Additional metrics for context
+                            posts_per_week = row.get("posts_per_week", 0)  # Add this column if available
+                            st.metric("Engagement Rate", f"{eng_rate:.2f}%", 
+                            help="Standard formula: (Avg Likes + Avg Comments) / Followers × 100")
+        
+                        # Contextual interpretation
+        
+            
+                        except Exception as e:
+                            st.warning(f"Could not calculate engagement rate: {str(e)}")
                         
                         # Posts - Show as links only
                         st.subheader("Top Posts")
@@ -219,8 +231,9 @@ else:
                             with cols[2]:
                                 # Calculate YouTube engagement percentage
                                 try:
-                                    yt_engagement = (row['top_video_views'] / row['subscribers']) * 100
-                                    st.metric("Engagement %", f"{yt_engagement:.2f}%")
+                                    yt_engagement = (row['total_views'] / row['subscribers']) * 100
+                                    st.metric("Engagement %", f"{min(yt_engagement, 100):.2f}%") 
+                                    
                                 except:
                                     st.metric("Engagement %", "N/A")
                             
