@@ -247,67 +247,58 @@ else:
             
             
             # Message button - using a unique key per username
-            if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
-                with st.popover(f"Send DM to @{row['username']}"):
-                    with st.form(key=f"dm_form_{row['username']}"):
-                        ig_username = st.text_input("Your Instagram Username")
-                        ig_password = st.text_input("Your Instagram Password", type="password")
-                        default_message = f"Hi @{row['username']}, I came across your profile and wanted to connect..."
-                        message = st.text_area("Message", value=default_message)
-                        if st.form_submit_button("Send Message"):
-                            try:
-                                # Initialize client with human-like delays
-                                cl = Client()
-                                cl.delay_range = [1, 3]  # Random delays between 1-3 seconds
-                                              
-                                # Try login
-                                try:
-                                    with st.spinner("Logging in..."):
-                                        login_success = cl.login(ig_username, ig_password)
-                                        if not login_success:
-                                            st.error("Login failed - check credentials")
-                                            st.stop()
-                                            st.success("✅ Login successful")
-                                except ChallengeRequired:
-                                    st.error("🔐 Verification required - please login via mobile first")
-                                    st.stop()
-                                except Exception as e:
-                                    st.error(f"❌ Login failed: {str(e)}")
-                                    st.stop()
+           # Message button - using a unique key per username
+if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
+    with st.popover(f"Send DM to @{row['username']}"):
+        with st.form(key=f"dm_form_{row['username']}"):
+            ig_username = st.text_input("Your Instagram Username")
+            ig_password = st.text_input("Your Instagram Password", type="password")
+            default_message = f"Hi @{row['username']}, I came across your profile and wanted to connect..."
+            message = st.text_area("Message", value=default_message)
+            
+            if st.form_submit_button("Send Message"):
+                try:
+                    # Initialize client with human-like delays
+                    cl = Client()
+                    cl.delay_range = [1, 3]  # Random delays between 1-3 seconds
+                    
+                    # Try login
+                    try:
+                        with st.spinner("Logging in..."):
+                            cl.login(ig_username, ig_password)
+                        st.success("✅ Login successful")
+                    except ChallengeRequired:
+                        st.error("🔐 Verification required - please login via mobile first")
+                        st.stop()
+                    except Exception as e:
+                        st.error(f"❌ Login failed: {str(e)}")
+                        st.stop()
                     
                     # Get user ID
-                                try:
-                                    with st.spinner("Finding user..."):
-                                        user_id = cl.user_id_from_username(row['username'])
-                                        time.sleep(random.uniform(1, 2))
-                                        
-                                except Exception as e:
-                                    st.error(f"❌ Couldn't find user: {str(e)}")
-                                    st.stop()
+                    try:
+                        with st.spinner("Finding user..."):
+                            user_id = cl.user_id_from_username(row['username'])
+                            time.sleep(random.uniform(1, 2))
+                    except Exception as e:
+                        st.error(f"❌ Couldn't find user: {str(e)}")
+                        st.stop()
                     
                     # Send message
-                               try:
-                                   with st.spinner("Sending message..."):
-                                       result = cl.direct_send(message, user_ids=[user_id])
-                                       time.sleep(random.uniform(2, 4))
-                        
-                                   if result:
-                                       st.success(f"✅ Message sent to @{row['username']}")
-                                       st.balloons()
-                                   else:
-                                       st.error("Message failed to send")
-                               except Exception as e:
-                                   st.error(f"❌ Failed to send: {str(e)}")
-                               # Always logout
-                               finally:
-                                   
-                                   try:
-                                       cl.logout()
-                                   except:
-                                       pass
+                    try:
+                        with st.spinner("Sending message..."):
+                            cl.direct_send(message, user_ids=[user_id])
+                            time.sleep(random.uniform(2, 4))
+                        st.success(f"✅ Message sent to @{row['username']}")
+                        st.balloons()
+                    except Exception as e:
+                        st.error(f"❌ Failed to send: {str(e)}")
+                    
+                    # Always logout
+                    finally:
+                        cl.logout()
                 
-                            except Exception as e:
-                                st.error(f"⚠️ Unexpected error: {str(e)}")
-                                st.info("Note: Instagram may limit automated actions. Try manual login first.")
+                except Exception as e:
+                    st.error(f"⚠️ Unexpected error: {str(e)}")
+                    st.info("Note: Instagram may limit automated actions. Try manual login first.")
 
         st.divider()
