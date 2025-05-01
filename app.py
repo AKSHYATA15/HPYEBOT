@@ -143,7 +143,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Hero Image - full-width first section
-st.image("assets/HOMEPAGE.jpg", use_column_width=True)
+st.image("assets/HOMEPAGE.jpg", use_container_width=True)
 
 # Welcome section
 col1, col2 = st.columns([2, 1])
@@ -157,8 +157,7 @@ with col1:
     """, unsafe_allow_html=True)
     if st.button("🚀 Start Exploring Now", key="main_cta", use_container_width=True, type="primary"):
         st.switch_page("pages/2_search_page.py")
-with col2:
-    st.image("https://via.placeholder.com/500x400/f8f9fa/4A80F0?text=Platform+Integration", use_column_width=True)
+
 
 # Stats section
 st.markdown("""
