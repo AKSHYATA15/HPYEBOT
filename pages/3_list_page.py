@@ -60,14 +60,10 @@ def load_data():
             yt = pd.read_excel("data/instagram_analysis_Fashion All (1) (1).xlsx", sheet_name=1)
             yt = yt.rename(columns={"instagram_username": "username"})
             
-            
-            
             # Merge YouTube data
             df = pd.merge(df, yt[["username", "subscribers", "total_views", "youtube_name", 
                                  "youtube_profile_image", "top_video_link", "top_video_views"]], 
                          on="username", how="left")
-            
-            
             
         except Exception as e:
             st.warning(f"Could not load YouTube data: {str(e)}")
@@ -101,6 +97,7 @@ def load_data():
     except Exception as e:
         st.error(f"Failed to load data: {str(e)}")
         return pd.DataFrame()
+
 df = load_data()
 
 # Get filters from session state
@@ -198,9 +195,6 @@ else:
                             st.metric("Engagement Rate", f"{eng_rate:.2f}%", 
                             help="Standard formula: (Avg Likes + Avg Comments) / Followers × 100")
         
-                        # Contextual interpretation
-        
-            
                         except Exception as e:
                             st.warning(f"Could not calculate engagement rate: {str(e)}")
                         
@@ -215,7 +209,13 @@ else:
                             else:
                                 st.info("No post data available")
                         
-                        
+                        with col2:
+                            st.markdown("**Least Liked Post**")
+                            if pd.notna(row.get("least_liked_url")):
+                                st.markdown(f"[View Post]({row['least_liked_url']})")
+                                st.metric("Likes", f"{int(row['least_liked_likes']):,}")
+                            else:
+                                st.info("No post data available")
 
                     with tab2:
                         # YouTube Metrics (only if data exists)
@@ -227,14 +227,12 @@ else:
                             else:
                                 st.markdown("**YouTube Channel:** Link not available")
                             
-                            
                             # YouTube metrics in columns
                             cols = st.columns(3)
                             with cols[0]:
                                 st.metric("Subscribers", f"{int(row['subscribers']):,}")
                             with cols[1]:
                                 st.metric("Total Views", f"{int(row['total_views']):,}")
-                            
                             
                             # Top video section
                             st.markdown("**Top Performing Video**")
@@ -244,61 +242,58 @@ else:
                         else:
                             st.info("No YouTube data available for this influencer")
 
-            
-            
             # Message button - using a unique key per username
-           # Message button - using a unique key per username
-if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
-    with st.popover(f"Send DM to @{row['username']}"):
-        with st.form(key=f"dm_form_{row['username']}"):
-            ig_username = st.text_input("Your Instagram Username")
-            ig_password = st.text_input("Your Instagram Password", type="password")
-            default_message = f"Hi @{row['username']}, I came across your profile and wanted to connect..."
-            message = st.text_area("Message", value=default_message)
-            
-            if st.form_submit_button("Send Message"):
-                try:
-                    # Initialize client with human-like delays
-                    cl = Client()
-                    cl.delay_range = [1, 3]  # Random delays between 1-3 seconds
-                    
-                    # Try login
-                    try:
-                        with st.spinner("Logging in..."):
-                            cl.login(ig_username, ig_password)
-                        st.success("✅ Login successful")
-                    except ChallengeRequired:
-                        st.error("🔐 Verification required - please login via mobile first")
-                        st.stop()
-                    except Exception as e:
-                        st.error(f"❌ Login failed: {str(e)}")
-                        st.stop()
-                    
-                    # Get user ID
-                    try:
-                        with st.spinner("Finding user..."):
-                            user_id = cl.user_id_from_username(row['username'])
-                            time.sleep(random.uniform(1, 2))
-                    except Exception as e:
-                        st.error(f"❌ Couldn't find user: {str(e)}")
-                        st.stop()
-                    
-                    # Send message
-                    try:
-                        with st.spinner("Sending message..."):
-                            cl.direct_send(message, user_ids=[user_id])
-                            time.sleep(random.uniform(2, 4))
-                        st.success(f"✅ Message sent to @{row['username']}")
-                        st.balloons()
-                    except Exception as e:
-                        st.error(f"❌ Failed to send: {str(e)}")
-                    
-                    # Always logout
-                    finally:
-                        cl.logout()
-                
-                except Exception as e:
-                    st.error(f"⚠️ Unexpected error: {str(e)}")
-                    st.info("Note: Instagram may limit automated actions. Try manual login first.")
+            if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
+                with st.popover(f"Send DM to @{row['username']}"):
+                    with st.form(key=f"dm_form_{row['username']}"):
+                        ig_username = st.text_input("Your Instagram Username")
+                        ig_password = st.text_input("Your Instagram Password", type="password")
+                        default_message = f"Hi @{row['username']}, I came across your profile and wanted to connect..."
+                        message = st.text_area("Message", value=default_message)
+
+                        if st.form_submit_button("Send Message"):
+                            try:
+                                # Initialize client with human-like delays
+                                cl = Client()
+                                cl.delay_range = [1, 3]  # Random delays between 1-3 seconds
+
+                                # Try login
+                                try:
+                                    with st.spinner("Logging in..."):
+                                        cl.login(ig_username, ig_password)
+                                    st.success("✅ Login successful")
+                                except ChallengeRequired:
+                                    st.error("🔐 Verification required - please login via mobile first")
+                                    st.stop()
+                                except Exception as e:
+                                    st.error(f"❌ Login failed: {str(e)}")
+                                    st.stop()
+
+                                # Get user ID
+                                try:
+                                    with st.spinner("Finding user..."):
+                                        user_id = cl.user_id_from_username(row['username'])
+                                        time.sleep(random.uniform(1, 2))
+                                except Exception as e:
+                                    st.error(f"❌ Couldn't find user: {str(e)}")
+                                    st.stop()
+
+                                # Send message
+                                try:
+                                    with st.spinner("Sending message..."):
+                                        cl.direct_send(message, user_ids=[user_id])
+                                        time.sleep(random.uniform(2, 4))
+                                    st.success(f"✅ Message sent to @{row['username']}")
+                                    st.balloons()
+                                except Exception as e:
+                                    st.error(f"❌ Failed to send: {str(e)}")
+
+                                # Always logout
+                                finally:
+                                    cl.logout()
+                            
+                            except Exception as e:
+                                st.error(f"⚠️ Unexpected error: {str(e)}")
+                                st.info("Note: Instagram may limit automated actions. Try manual login first")
 
         st.divider()
