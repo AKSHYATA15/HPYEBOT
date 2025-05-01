@@ -143,7 +143,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Hero Image - full-width first section
-st.image("assets/homepage_banner.jpg", use_column_width=True)
+st.image("assets/HOMEPAGE.jpg", use_column_width=True)
 
 # Welcome section
 col1, col2 = st.columns([2, 1])
