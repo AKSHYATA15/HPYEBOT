@@ -1,42 +1,55 @@
 import streamlit as st
 
-# Page settings
 st.set_page_config(page_title="Influencer Discovery", layout="wide")
 
-# Custom CSS for modern aesthetic
+# Updated CSS to fully style the sidebar
 st.markdown("""
     <style>
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #f9f9f9, #e0eaff);
-        color: #000;
+    /* Sidebar container */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f1f5ff, #e3ecff);
         padding: 2rem 1rem;
+        border-right: 1px solid #ddd;
     }
-    [data-testid="stSidebarNav"] > ul {
+
+    /* Sidebar nav styling */
+    [data-testid="stSidebarNav"] ul {
+        padding: 0;
+    }
+
+    [data-testid="stSidebarNav"] li {
+        list-style: none;
+        margin-bottom: 1.2rem;
         font-size: 1.1rem;
-    }
-    [data-testid="stSidebarNav"] ul li {
-        margin-bottom: 15px;
         font-weight: 500;
     }
-    /* Center the content */
+
+    [data-testid="stSidebarNav"] li a {
+        text-decoration: none;
+        color: #333;
+        border-radius: 8px;
+        padding: 0.4rem 0.8rem;
+        display: block;
+        transition: background-color 0.3s ease;
+    }
+
+    [data-testid="stSidebarNav"] li a:hover {
+        background-color: #dce8ff;
+        color: #1a4ed8;
+    }
+
+    /* Active tab styling */
+    [data-testid="stSidebarNav"] li a[aria-current="page"] {
+        background-color: #4a80f0;
+        color: white !important;
+    }
+
+    /* Main content padding */
     .block-container {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+        padding: 2rem 3rem;
     }
-    /* Welcome text styling */
-    .welcome-text h1 {
-        font-size: 3rem;
-        color: #31333F;
-        font-weight: 800;
-        margin-top: 2rem;
-    }
-    .welcome-text p {
-        font-size: 1.3rem;
-        color: #666;
-        margin-bottom: 2rem;
-    }
-    /* Button style */
+
+    /* CTA Button styling */
     div.stButton > button {
         background-color: #4A80F0;
         color: white;
@@ -46,6 +59,7 @@ st.markdown("""
         border-radius: 8px;
         transition: 0.3s;
     }
+
     div.stButton > button:hover {
         background-color: #315fd1;
         transform: scale(1.05);
@@ -53,18 +67,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Display image
+# Main image and title
 st.image("assets/HOMEPAGE.jpg", use_container_width=True)
 
-# Text + button
 st.markdown("""
-<div class="welcome-text">
-    <h1>Welcome to Influencer Discovery 🔍</h1>
-    <p>Explore Instagram and YouTube influencers by niche and category.<br>
-    Use the menu on the left to begin your journey.</p>
-</div>
-""", unsafe_allow_html=True)
+## Welcome to Influencer Discovery 🔍
+Explore influencers by niche and category.
 
-# CTA Button
+.
+""")
+
+# Start button
 if st.button("🚀 Start Exploring"):
     st.switch_page("pages/2_search_page.py")
+
