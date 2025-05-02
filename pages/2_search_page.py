@@ -3,6 +3,13 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
+st.set_page_config(
+    page_title="Search Influencers", 
+    layout="wide", 
+    page_icon="🔍",
+    initial_sidebar_state="expanded"
+)
+
 # Custom CSS for professional styling
 def inject_custom_css():
     st.markdown("""
@@ -99,9 +106,10 @@ def load_data():
     return df[df["status"] == "Success"]
 
 # Initialize
+
+# Initialize
 inject_custom_css()
 df = load_data()
-st.set_page_config(page_title="Search Influencers", layout="wide", page_icon="🔍")
 
 # --- Hero Section ---
 st.markdown("""
