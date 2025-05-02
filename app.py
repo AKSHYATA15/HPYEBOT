@@ -266,7 +266,7 @@ platform_cols = st.columns(3)
 platforms = [
     {"name": "Instagram", "image": "assets/Instagram.jpg", "page": "pages/2_search_page.py"},
     {"name": "YouTube", "image": "assets/youtube.jpg", "page": "pages/2_search_page.py"},
-    {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/tiktok.py"}
+    {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/tiktok_platform.py"}
 ]
 
 platform_cols = st.columns(3)
