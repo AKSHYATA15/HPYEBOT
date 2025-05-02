@@ -69,11 +69,49 @@ st.markdown("""
         padding: 12px 20px;
     }
     .stImage img {
-        max-width: 150px !important;
+        max-width: 100px !important;
         height: auto !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+/* Increase username size in the list */
+.username-list {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Decrease profile image size in the dashboard */
+.dashboard-profile-img {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Increase username and bio size in dashboard */
+.dashboard-username {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.dashboard-bio {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Add background color to dashboard */
+.dashboard-panel {
+    background-color: #f7f9fc;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 def load_data():
     try:
@@ -154,7 +192,7 @@ else:
                 st.markdown(f"[![profile](https://via.placeholder.com/120)]({profile_url if pd.notna(profile_url) else '#'})", unsafe_allow_html=True)
 
         with cols[1]:
-            st.markdown(f"**{row['username']}**", unsafe_allow_html=True)
+            st.markdown(f'<div class="username-list">{username}</div>', unsafe_allow_html=True)
 
         with cols[2]:
             st.metric("Instagram Followers", f"{int(row['followers']):,}" if not pd.isna(row['followers']) else "N/A")
