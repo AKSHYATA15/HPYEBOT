@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 # Load CSV
-df = pd.read_csv("tiktok_influencers_by_hashtag - tiktok_influencers_by_hashtag.csv")
+df = pd.read_csv("data/tiktok_influencers_by_hashtag - tiktok_influencers_by_hashtag.csv")
 
 # Clean column names
 df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
