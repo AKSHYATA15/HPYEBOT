@@ -272,7 +272,7 @@ platforms = [
 platform_cols = st.columns(3)
 for idx, platform in enumerate(platforms):
     with platform_cols[idx]:
-        st.image(platform["image"], use_container_width=True)
+        st.image(platform["image"],width=200))
         if st.button(f"Explore {platform['name']} →", key=f"btn_{platform['name']}"):
             st.switch_page(platform["page"])
 
