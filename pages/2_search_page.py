@@ -202,7 +202,7 @@ if "selected_niche" not in st.session_state:
     st.markdown("---")
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.image(str(Path(__file__).parent / "assets/search_placeholder.png", width=300)
+        st.image(str(Path(__file__).parent / "assets/search_placeholder.png", width=300))
         st.markdown("""
         <div style="text-align: center; margin-top: 1rem;">
             <h4>Select a niche to begin your search</h4>
