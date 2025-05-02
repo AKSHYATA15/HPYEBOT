@@ -48,6 +48,11 @@ st.markdown("""
         padding: 3rem;
         color: white;
     }
+    .welcome-text {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem auto;
+    }
     .welcome-text h1 {
         font-size: 3.5rem;
         background: linear-gradient(90deg, #4A80F0, #8E2DE2);
@@ -61,7 +66,6 @@ st.markdown("""
         font-size: 1.4rem;
         color: #555;
         margin-bottom: 3rem;
-        max-width: 800px;
     }
     .feature-card {
         background: white;
@@ -115,6 +119,53 @@ st.markdown("""
         font-size: 1.1rem;
         opacity: 0.9;
     }
+    .platform-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    .platform-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    .platform-card img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .platform-button {
+        width: 100%;
+        border: none;
+        background: linear-gradient(135deg, #4A80F0, #8E2DE2);
+        color: white;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 0 0 12px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .section-title {
+        text-align: center;
+        margin: 4rem 0 2rem 0;
+        font-size: 2.5rem;
+        background: linear-gradient(90deg, #4A80F0, #8E2DE2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+    }
+    @media (max-width: 768px) {
+        .welcome-text h1 {
+            font-size: 2.5rem;
+        }
+        .welcome-text p {
+            font-size: 1.1rem;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -143,21 +194,17 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Hero Image - full-width first section
-st.image("assets/HOMEPAGE.jpg", use_container_width=True)
+st.image("assets/HOMEPAGE.jpg", use_column_width=True)
 
-# Welcome section
-col1, col2 = st.columns([2, 1])
-with col1:
-    st.markdown("""
-    <div class="welcome-text">
-        <h1>Discover Premium Influencers Across All Platforms</h1>
-        <p>Unlock the power of data-driven influencer marketing with our comprehensive discovery platform. 
-        Analyze millions of creators across Instagram, YouTube, and TikTok in seconds.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("🚀 Start Exploring Now", key="main_cta", use_container_width=True, type="primary"):
-        st.switch_page("pages/2_search_page.py")
-
+# Welcome section - Centered
+st.markdown("""
+<div class="welcome-text">
+    <h1>Discover Premium Influencers Across All Platforms</h1>
+    <p>Unlock the power of data-driven influencer marketing with our comprehensive discovery platform. 
+    Analyze millions of creators across Instagram, YouTube, and TikTok in seconds.</p>
+    <button class="cta-button">🚀 Start Exploring Now</button>
+</div>
+""", unsafe_allow_html=True)
 
 # Stats section
 st.markdown("""
@@ -211,21 +258,23 @@ with cols[2]:
     </div>
     """, unsafe_allow_html=True)
 
-# Platform showcase with official logos
-st.subheader("📱 Supported Platforms")
+# New Platform Explorer Section
+st.markdown('<h1 class="section-title">Start Exploring</h1>', unsafe_allow_html=True)
+
+# Platform cards with clickable images
 platform_cols = st.columns(3)
 platforms = [
-    {"name": "Instagram", "color": "#E1306C", "icon": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"},
-    {"name": "YouTube", "color": "#FF0000", "icon": "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"},
-    {"name": "TikTok", "color": "#000000", "icon": "https://upload.wikimedia.org/wikipedia/en/0/0a/TikTok_logo.svg"}
+    {"name": "Instagram", "image": "assets/Instagram logo.png", "page": "pages/2_search_page.py"},
+    {"name": "YouTube", "image": "assets/youtube logo.png", "page": "pages/2_search_page.py"},
+    {"name": "TikTok", "image": "assets/tiktok logo.png", "page": "pages/tiktok.py"}
 ]
+
 for idx, platform in enumerate(platforms):
     with platform_cols[idx]:
         st.markdown(f"""
-        <div style="background: {platform['color']}; color: white; padding: 1.5rem; border-radius: 12px; text-align: center;">
-            <img src="{platform['icon']}" width="50" style="margin-bottom: 1rem;">
-            <h3 style="color: white; margin-bottom: 0.5rem;">{platform['name']}</h3>
-            <p style="opacity: 0.9;">Full analytics and discovery for {platform['name']} creators</p>
+        <div class="platform-card" onclick="window.location.href='{platform['page']}'">
+            <img src="{platform['image']}" alt="{platform['name']}">
+            <button class="platform-button">Explore {platform['name']} →</button>
         </div>
         """, unsafe_allow_html=True)
 
