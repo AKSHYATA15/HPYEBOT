@@ -1,91 +1,117 @@
+
 import streamlit as st
 import pandas as pd
 import random
 
-# Load CSV
+# Load and clean CSV
 df = pd.read_csv("data/tiktok_influencers_by_hashtag - tiktok_influencers_by_hashtag.csv")
-
-# Clean column names
 df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
 
-# Setup Streamlit page
+# Set page config
 st.set_page_config(page_title="TikTok Influencer Search", layout="wide")
 
 # Custom CSS
 st.markdown("""
     <style>
+    .main-title {
+        font-size: 40px !important;
+        font-weight: 900;
+        color: #202124;
+        padding-top: 20px;
+        padding-bottom: 10px;
+    }
+    .sub-header {
+        font-size: 24px !important;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #333333;
+    }
     .influencer-card {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 12px;
-        margin-bottom: 1rem;
+        background-color: #f1f3f4;
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
         display: flex;
         align-items: flex-start;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.07);
     }
     .profile-img {
-        height: 60px;
-        width: 60px;
+        height: 72px;
+        width: 72px;
         border-radius: 50%;
-        font-size: 24px;
+        font-size: 28px;
         color: white;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-right: 1rem;
+        margin-right: 1.5rem;
         font-weight: bold;
         flex-shrink: 0;
+    }
+    .slider-container .stSlider {
+        max-width: 500px !important;
+    }
+    .info-text {
+        font-size: 20px;
+        line-height: 1.6;
+        color: #111827;
+    }
+    .username {
+        font-size: 24px;
+        font-weight: 800;
+        color: #1f2937;
+        margin-bottom: 0.3rem;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Page Title
-st.title("🎯 TikTok Influencer Discovery")
+# Title
+st.markdown('<div class="main-title">🎯 TikTok Influencer Discovery</div>', unsafe_allow_html=True)
 
-# Niche Filter
-st.subheader("Filter by Hashtag (Niche)")
-niches = df['hashtag'].dropna().unique().tolist()
-selected_niche = st.multiselect("Select Niche(s):", niches, default=niches[:3])
+# Filters
+st.markdown('<div class="sub-header">🔍 Filter by Hashtag (Niche)</div>', unsafe_allow_html=True)
+niches = sorted(df['hashtag'].dropna().unique())
+selected_niche = st.selectbox("Select Niche(s):", niches)
 
-# Followers Filter
+# Follower filter
 min_followers = int(df['followers'].min())
 max_followers = int(df['followers'].max())
-follower_range = st.slider("Follower Range", min_followers, max_followers, (min_followers, max_followers), step=1000)
+st.markdown('<div class="sub-header">📊 Follower Range</div>', unsafe_allow_html=True)
+follower_range = st.slider("",
+                           min_value=min_followers,
+                           max_value=max_followers,
+                           value=(min_followers, max_followers),
+                           key="follower_slider")
 
-# Filter Logic
-filtered_df = df[
-    df['hashtag'].isin(selected_niche) &
+# Filter dataset
+filtered = df[
+    (df['hashtag'] == selected_niche) &
     (df['followers'] >= follower_range[0]) &
     (df['followers'] <= follower_range[1])
 ]
 
-# Avatar Generator
-def initials_avatar(username):
-    initials = ''.join([w[0] for w in username.strip().split()[:2]]).upper()
-    colors = ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#8338EC']
-    color = random.choice(colors)
-    return f'<div class="profile-img" style="background-color: {color};">{initials}</div>'
-
 # Display Results
-st.markdown("### Influencers Found")
+st.markdown('<div class="sub-header">📋 Influencers Found</div>', unsafe_allow_html=True)
 
-for _, row in filtered_df.iterrows():
-    avatar_html = initials_avatar(row['username'])
-    bio = row['bio'] if pd.notna(row['bio']) else "No bio available"
-    st.markdown(f"""
-    <div class="influencer-card">
-        {avatar_html}
-        <div>
-            <div style="font-size: 20px; font-weight: bold;">{row['username']}</div>
-            <div><strong>Followers:</strong> {row['followers']:,}</div>
-            <div><strong>Total Likes:</strong> {row['total_likes']:,}</div>
-            <div><strong>Hashtag:</strong> {row['hashtag']}</div>
-            <div><strong>Bio:</strong> {bio}</div>
-            <div><a href="{row['profile_url']}" target="_blank">🔗 View Profile</a></div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Empty message
-if filtered_df.empty:
+if filtered.empty:
     st.warning("No influencers match your selected filters.")
+else:
+    for _, row in filtered.iterrows():
+        initials = row['username'][:2].upper()
+        colors = ["#6366F1", "#10B981", "#EF4444", "#F59E0B", "#3B82F6", "#EC4899"]
+        color = random.choice(colors)
+
+        col1, col2 = st.columns([1, 8])
+        with col1:
+            st.markdown(
+                f'<div class="profile-img" style="background-color: {color};">{initials}</div>',
+                unsafe_allow_html=True
+            )
+        with col2:
+            st.markdown(f'<div class="username">{row["username"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="info-text">Followers: {int(row["followers"]):,}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="info-text">Total Likes: {int(row["total_likes"]):,}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="info-text">Hashtag: #{row["hashtag"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="info-text">Bio: {row["bio"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="info-text">🔗 <a href="{row["profile_url"]}" target="_blank">Visit Profile</a></div>', unsafe_allow_html=True)
+
