@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(
     page_title="Influencer Discovery",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
     page_icon="🔍"
 )
 
