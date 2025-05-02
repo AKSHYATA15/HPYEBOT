@@ -8,7 +8,7 @@ df = pd.read_csv("data/tiktok_influencers_by_hashtag - tiktok_influencers_by_has
 df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
 
 # Set page config
-st.set_page_config(page_title="TikTok Influencer Search", layout="wide")
+st.set_page_config(page_title="TikTok Influencer Search", layout="wide",initial_sidebar_state="collapsed")
 
 # Custom CSS
 st.markdown("""
@@ -69,9 +69,9 @@ st.markdown("""
 st.markdown('<div class="main-title">🎯 TikTok Influencer Discovery</div>', unsafe_allow_html=True)
 
 # Filters
-st.markdown('<div class="sub-header">🔍 Filter by Hashtag (Niche)</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">🔍 Filter by Niche</div>', unsafe_allow_html=True)
 niches = sorted(df['hashtag'].dropna().unique())
-selected_niche = st.selectbox("Select Niche(s):", niches)
+selected_niche = st.selectbox("Select Niche:", niches)
 
 # Follower filter
 min_followers = int(df['followers'].min())
