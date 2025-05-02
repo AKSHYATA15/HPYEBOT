@@ -271,11 +271,10 @@ platforms = [
 
 for idx, platform in enumerate(platforms):
     with platform_cols[idx]:
+        st.container()
+        st.image(platform["image"], use_container_width=True)
         st.markdown(f"""
-        <div class="platform-card" onclick="window.location.href='{platform['page']}'">
-            <img src="{platform['image']}" alt="{platform['name']}">
             <button class="platform-button">Explore {platform['name']} →</button>
-        </div>
         """, unsafe_allow_html=True)
 
 # Footer
