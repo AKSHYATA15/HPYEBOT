@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Search Influencers", 
     layout="wide", 
     page_icon="🔍",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 def inject_custom_css():
