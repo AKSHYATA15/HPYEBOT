@@ -14,45 +14,57 @@ st.set_page_config(
     page_icon="✨"
 )
 
-# CSS styling
+# CSS styling to improve frontend appearance
 st.markdown("""
 <style>
     .header {
         color: #2e35a0;
+        font-size: 36px;
         border-bottom: 2px solid #f6a4b9;
-        padding-bottom: 10px;
+        padding-bottom: 20px;
+        font-weight: bold;
     }
     .metric-box {
         background-color: white;
         border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-        border-left: 5px solid #2e35a0;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin: 15px 0;
+        border-left: 6px solid #2e35a0;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        font-size: 18px;
     }
     .highlight-pink {
         background-color: #f6a4b9;
         color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 16px;
     }
     .highlight-blue {
         background-color: #2e35a0;
         color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 16px;
     }
     .post-box {
         background-color: white;
         border-radius: 10px;
-        padding: 15px;
-        margin: 15px 0;
+        padding: 20px;
+        margin: 20px 0;
         border: 1px solid #f6a4b9;
+        font-size: 18px;
     }
     .popover-content {
         max-height: 80vh;
         overflow-y: auto;
-        padding: 15px;
+        padding: 20px;
+    }
+    h2, h3, h4 {
+        font-size: 24px;
+    }
+    .tabs {
+        font-size: 20px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -138,56 +150,60 @@ else:
                     st.markdown(f"<h2>{row['username']}'s Dashboard</h2>", unsafe_allow_html=True)
                     st.caption(row.get("bio", "No bio available"))
                     
-                    # Using vertical layout instead of nested columns
-                    st.subheader("Instagram Profile")
-                    st.metric("Followers", f"{int(row['followers']):,}" if pd.notna(row['followers']) else "N/A")
-                    st.metric("Following", f"{int(row['following']):,}" if pd.notna(row['following']) else "N/A")
-                    st.metric("Verified", "Yes" if row.get('is_verified', False) else "No")
-                    st.metric("Business Account", "Yes" if row.get('is_business_account', False) else "No")
+                    # Using tabs for Instagram and YouTube Analytics
+                    tabs = st.radio("Analytics", ("Instagram", "YouTube"), key=f"analytics_tabs_{row['username']}")
                     
-                    insta_profile_url = f"https://instagram.com/{row['username']}"
-                    st.markdown(f"**Instagram Profile:** [@{row['username']}]({insta_profile_url})")
-                    
-                    st.subheader("Engagement")
-                    try:
-                        avg_likes = (row["most_liked_likes"] + row["least_liked_likes"]) / 2
-                        avg_comments = (row["most_liked_comments"] + row["least_liked_comments"]) / 2
-                        eng_rate = ((avg_likes + avg_comments) / row["followers"]) * 100
-                        posts_per_week = row.get("posts_per_week", 0)
-                        st.metric("Engagement Rate", f"{eng_rate:.2f}%", help="Standard formula: (Avg Likes + Avg Comments) / Followers × 100")
-                    except Exception as e:
-                        st.warning(f"Could not calculate engagement rate: {str(e)}")
-                    
-                    st.subheader("Top Posts")
-                    st.markdown("**Most Liked Post**")
-                    if pd.notna(row.get("most_liked_url")):
-                        st.markdown(f"[View Post]({row['most_liked_url']})")
-                        st.metric("Likes", f"{int(row['most_liked_likes']):,}")
-                    else:
-                        st.info("No post data available")
-                    
-                    st.markdown("**Least Liked Post**")
-                    if pd.notna(row.get("least_liked_url")):
-                        st.markdown(f"[View Post]({row['least_liked_url']})")
-                        st.metric("Likes", f"{int(row['least_liked_likes']):,}")
-                    else:
-                        st.info("No post data available")
-                    
-                    st.subheader("YouTube Analytics")
-                    if pd.notna(row.get('subscribers')):
-                        if pd.notna(row.get('profile_link')):
-                            st.markdown(f"**YouTube Channel:** [View Profile]({row['profile_link']})")
+                    if tabs == "Instagram":
+                        st.subheader("Instagram Analytics")
+                        st.metric("Followers", f"{int(row['followers']):,}" if pd.notna(row['followers']) else "N/A")
+                        st.metric("Following", f"{int(row['following']):,}" if pd.notna(row['following']) else "N/A")
+                        st.metric("Verified", "Yes" if row.get('is_verified', False) else "No")
+                        st.metric("Business Account", "Yes" if row.get('is_business_account', False) else "No")
+                        
+                        insta_profile_url = f"https://instagram.com/{row['username']}"
+                        st.markdown(f"**Instagram Profile:** [@{row['username']}]({insta_profile_url})")
+                        
+                        st.subheader("Engagement")
+                        try:
+                            avg_likes = (row["most_liked_likes"] + row["least_liked_likes"]) / 2
+                            avg_comments = (row["most_liked_comments"] + row["least_liked_comments"]) / 2
+                            eng_rate = ((avg_likes + avg_comments) / row["followers"]) * 100
+                            posts_per_week = row.get("posts_per_week", 0)
+                            st.metric("Engagement Rate", f"{eng_rate:.2f}%", help="Standard formula: (Avg Likes + Avg Comments) / Followers × 100")
+                        except Exception as e:
+                            st.warning(f"Could not calculate engagement rate: {str(e)}")
+                        
+                        st.subheader("Top Posts")
+                        st.markdown("**Most Liked Post**")
+                        if pd.notna(row.get("most_liked_url")):
+                            st.markdown(f"[View Post]({row['most_liked_url']})")
+                            st.metric("Likes", f"{int(row['most_liked_likes']):,}")
                         else:
-                            st.markdown("**YouTube Channel:** Link not available")
+                            st.info("No post data available")
                         
-                        st.metric("Subscribers", f"{int(row['subscribers']):,}")
-                        st.metric("Total Views", f"{int(row['total_views']):,}")
-                        
-                        st.markdown("**Top Performing Video**")
-                        st.markdown(f"[View on YouTube]({row.get('top_video_link', '#')})")
-                        st.metric("Views", f"{int(row['top_video_views']):,}")
-                    else:
-                        st.info("No YouTube data available for this influencer")
+                        st.markdown("**Least Liked Post**")
+                        if pd.notna(row.get("least_liked_url")):
+                            st.markdown(f"[View Post]({row['least_liked_url']})")
+                            st.metric("Likes", f"{int(row['least_liked_likes']):,}")
+                        else:
+                            st.info("No post data available")
+
+                    elif tabs == "YouTube":
+                        st.subheader("YouTube Analytics")
+                        if pd.notna(row.get('subscribers')):
+                            if pd.notna(row.get('profile_link')):
+                                st.markdown(f"**YouTube Channel:** [View Profile]({row['profile_link']})")
+                            else:
+                                st.markdown("**YouTube Channel:** Link not available")
+                            
+                            st.metric("Subscribers", f"{int(row['subscribers']):,}")
+                            st.metric("Total Views", f"{int(row['total_views']):,}")
+                            
+                            st.markdown("**Top Performing Video**")
+                            st.markdown(f"[View on YouTube]({row.get('top_video_link', '#')})")
+                            st.metric("Views", f"{int(row['top_video_views']):,}")
+                        else:
+                            st.info("No YouTube data available for this influencer")
 
         with cols[5]:
             if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
@@ -229,4 +245,4 @@ else:
                                 except:
                                     pass
         st.divider()
-                                   
+                             
