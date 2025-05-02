@@ -19,19 +19,19 @@ def inject_custom_css():
             --dark: #1A1A1A;
             --light: #F8F9FA;
         }
-        html {
-            font-size: 17px;
+        html, body, div, p, span, button {
+            font-size: 18px !important;
         }
         @media (max-width: 768px) {
             html {
-                font-size: 15px;
+                font-size: 16px !important;
             }
         }
         .stButton>button {
             border-radius: 10px !important;
             padding: 0.85rem 1.5rem !important;
-            font-weight: 600 !important;
-            font-size: 1rem !important;
+            font-weight: 700 !important;
+            font-size: 1.05rem !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             border: 1px solid rgba(0,0,0,0.1);
             transition: all 0.2s ease;
@@ -40,21 +40,8 @@ def inject_custom_css():
             background: linear-gradient(90deg, #4A80F0, #8E2DE2);
             color: white;
         }
-        .niche-btn {
-            background: linear-gradient(135deg, #FFC371, #FF5F6D);
-            color: white;
-            border-radius: 8px;
-            font-weight: bold;
-            padding: 0.6rem 1.2rem;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .niche-btn:hover {
-            background: linear-gradient(135deg, #FF5F6D, #FFC371);
-            transform: scale(1.05);
-        }
         .header-title {
-            font-size: 2.5rem !important;
+            font-size: 2.75rem !important;
             font-weight: 800;
         }
         .platform-metric {
@@ -62,7 +49,7 @@ def inject_custom_css():
             font-weight: 700;
         }
         .expander-header p {
-            font-size: 1rem !important;
+            font-size: 1.15rem !important;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -102,7 +89,7 @@ st.markdown("""
             margin-bottom: 2rem;
             color: white;">
     <h1 class="header-title">🔍 Discover Premium Influencers</h1>
-    <p style="color: rgba(255,255,255,0.9); font-size: 1.15rem;">
+    <p style="color: rgba(255,255,255,0.95); font-size: 1.25rem;">
         Find the perfect creators across Instagram and YouTube for your brand
     </p>
 </div>
