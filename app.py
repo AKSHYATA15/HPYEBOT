@@ -269,13 +269,12 @@ platforms = [
     {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/tiktok.py"}
 ]
 
+platform_cols = st.columns(3)
 for idx, platform in enumerate(platforms):
     with platform_cols[idx]:
-        st.container()
         st.image(platform["image"], use_container_width=True)
-        st.markdown(f"""
-            <button class="platform-button">Explore {platform['name']} →</button>
-        """, unsafe_allow_html=True)
+        if st.button(f"Explore {platform['name']} →", key=f"btn_{platform['name']}"):
+            st.switch_page(platform["page"])
 
 # Footer
 st.markdown("---")
