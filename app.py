@@ -194,7 +194,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Hero Image - full-width first section
-st.image("assets/HOMEPAGE.jpg", use_column_width=True)
+st.image("assets/HOMEPAGE.jpg", use_container_width=True)
 
 # Welcome section - Centered
 st.markdown("""
