@@ -6,7 +6,7 @@ from instagrapi import Client
 from instagrapi.exceptions import LoginRequired, ChallengeRequired
 
 # Set page config must be FIRST command
-st.set_page_config(page_title="Influencer List", layout="wide")
+st.set_page_config(page_title="Influencer List", layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
 <style>
