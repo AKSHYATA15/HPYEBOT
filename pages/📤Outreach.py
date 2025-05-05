@@ -6,6 +6,34 @@ import time
 st.set_page_config(page_title="Outreach", layout="wide")
 st.title("📨 Outreach Automation")
 
+st.markdown("""
+    <style>
+    .main {
+    background-color: #f8f9fa;
+}
+[data-testid="stSidebar"] {
+    padding: 2.5rem 1.5rem !important;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+}
+[data-testid="stSidebarNav"] > ul {
+    font-size: 1.15rem;
+    gap: 12px;
+}
+[data-testid="stSidebarNav"] ul li {
+    margin-bottom: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+[data-testid="stSidebarNav"] ul li:hover {
+    background: rgba(0,0,0,0.05);
+    transform: translateX(5px);
+}
+    
+    </style>
+""", unsafe_allow_html=True)
+
 # Check if there are selected influencers
 if "outreach_influencers" not in st.session_state or not st.session_state.outreach_influencers:
     st.warning("No influencers selected for outreach.")
