@@ -97,5 +97,3 @@ if "outreach_influencers" in st.session_state and st.session_state.outreach_infl
     st.write(f"**Selected for Outreach:** {len(st.session_state.outreach_influencers)} influencers.")
     st.button("Proceed to Outreach Page", on_click=lambda: st.session_state.page = 'outreach')
 
-# Go to Outreach Page button on top right
-st.sidebar.button("Go to Outreach Page", on_click=lambda: st.session_state.page = 'outreach')
