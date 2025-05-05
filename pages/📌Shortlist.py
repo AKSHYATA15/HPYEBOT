@@ -52,4 +52,4 @@ if st.button("✅ Confirm and Go to Outreach Page"):
     else:
         st.session_state.outreach_influencers = selected
         st.success("Influencers selected. Redirecting...")
-        st.switch_page("outreach.py")
+        st.switch_page("📤Outreach.py")
