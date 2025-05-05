@@ -247,9 +247,10 @@ else:
             
             
             # Message button - using a unique key per username
-            if st.button("💬 Message", key=f"msg_btn_{row['username']}"):
+            if st.button("💬 Message", key=f"msg_btn_{row['username']}_{random.randint(0, 1000)}"):
                 with st.popover(f"Send DM to @{row['username']}"):
-                    with st.form(key=f"dm_form_{row['username']}"):
+                    with st.form(key=f"dm_form_{row['username']}_{random.randint(0, 1000)}"):
+                                  
                         ig_username = st.text_input("Your Instagram Username")
                         ig_password = st.text_input("Your Instagram Password", type="password")
                         default_message = f"Hi @{row['username']}, I came across your profile and wanted to connect..."
