@@ -107,6 +107,9 @@ df = load_data()
 niche = st.session_state.get("selected_niche")
 infl_type = st.session_state.get("selected_category")
 
+if "shortlisted_influencers" not in st.session_state:
+    st.session_state.shortlisted_influencers = []
+
 if not niche or not infl_type:
     st.warning("Please select both a Niche and Influencer Type.")
     st.stop()
@@ -249,12 +252,13 @@ else:
             # Message button - using a unique key per username
                         # Shortlist checkbox instead of DM button
             # Inside your loop in list_page.py
-            shortlist_key = f"shortlist_{row['username']}"
-            if st.checkbox("Shortlist", key=shortlist_key):
-                if "shortlist" not in st.session_state:
-                    st.session_state.shortlist = []
-                if row['username'] not in st.session_state.shortlist:
-                    st.session_state.shortlist.append(row['username'])
+            if st.checkbox("Shortlist", key=f"shortlist_{row['username']}"):
+                if row['username'] not in st.session_state.shortlisted_influencers:
+                    st.session_state.shortlisted_influencers.append({
+                        "username": row['username'],
+                        "niche": row['Niche']
+                    })
+
 
             
             
