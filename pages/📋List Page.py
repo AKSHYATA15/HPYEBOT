@@ -8,6 +8,15 @@ from instagrapi.exceptions import LoginRequired, ChallengeRequired
 # Set page config must be FIRST command
 st.set_page_config(page_title="Influencer List", layout="wide", initial_sidebar_state="collapsed")
 
+import streamlit.components.v1 as components
+
+components.html("""
+    <script>
+        window.parent.scrollTo(0, 0);
+    </script>
+""", height=0)
+
+
 st.markdown("""
 <style>
 
