@@ -8,7 +8,13 @@ st.set_page_config(
     page_icon="🔍"
 )
 
-
+st.markdown("""
+    <style>
+        section[data-testid="stSidebarNav"] {
+            display: none;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 
 
