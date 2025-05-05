@@ -267,9 +267,7 @@ else:
                         "bio": row.get("bio", ""),
                         "followers": row.get("followers", 0),
                         "subscribers": row.get("subscribers", 0),
-                        "Niche": row.get("Niche", ""),
-                        "profile_pic_url": row.get("profile_pic_url", ""),
-                        "youtube_profile_image": row.get("youtube_profile_image", "")    })
+                        "Niche": row.get("Niche", "")   })
 
 
 
