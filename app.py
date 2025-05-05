@@ -192,6 +192,29 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+# Stats section
+st.markdown("""
+<div class="stats-container">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+        <div class="stat-item">
+            <div class="stat-number">250K+</div>
+            <div class="stat-label">Influencers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Niches</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">10M+</div>
+            <div class="stat-label">Data Points</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Accuracy</div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # Feature cards
