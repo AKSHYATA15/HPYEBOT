@@ -13,19 +13,17 @@ selected_for_outreach = []
 for influencer in st.session_state.shortlisted_influencers:
     cols = st.columns(6)
     with cols[0]:
-        img = influencer["youtube_profile_image"] or influencer["profile_pic_url"] or "https://via.placeholder.com/60"
-        st.image(img, width=60)
-    with cols[1]:
         st.write(f"**{influencer['username']}**")
-    with cols[2]:
+    with cols[1]:
         st.write(f"**Bio:** {influencer['bio'] or 'No bio'}")
-    with cols[3]:
+    with cols[2]:
         st.metric("Followers", f"{int(influencer['followers']):,}")
-    with cols[4]:
+    with cols[3]:
         st.metric("Subscribers", f"{int(influencer['subscribers']):,}" if influencer['subscribers'] else "N/A")
-    with cols[5]:
+    with cols[4]:
         st.checkbox("Select for Outreach", key=f"select_{influencer['username']}", 
                     value=True, on_change=lambda u=influencer['username']: selected_for_outreach.append(u))
+    
 
 # Button to go to outreach page
 if st.button("➡️ Go to Outreach Page", use_container_width=True):
