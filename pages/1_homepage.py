@@ -1,50 +1,57 @@
 import streamlit as st
-import time
-import random
 from instagrapi import Client
 from instagrapi.exceptions import ChallengeRequired
+import time
+import random
+import datetime
 
 # Page configuration
-st.set_page_config(page_title="Send Instagram DM", layout="centered")
+st.set_page_config(page_title="Instagram DM Sender", layout="centered")
 
-st.title("📩 Send Instagram DM")
-st.info("Enter your Instagram credentials to send a Direct Message.")
+st.title("📩 Send Instagram Direct Message")
 
-# Message form
 with st.form("dm_form"):
     sender_username = st.text_input("Your Instagram Username")
     sender_password = st.text_input("Your Instagram Password", type="password")
-    recipient_username = st.text_input("Recipient Instagram Username")
-    message = st.text_area("Message", value="Hi! I wanted to connect with you.")
+    receiver_username = st.text_input("Receiver's Instagram Username")
+    default_message = f"Hi @{receiver_username}, I came across your profile and wanted to connect!"
+    message = st.text_area("Message", value=default_message)
 
-    send_button = st.form_submit_button("Send Message")
+    submit_btn = st.form_submit_button("Send Message")
 
-if send_button:
-    try:
-        cl = Client()
-        cl.delay_range = [1, 3]
+if submit_btn:
+    if not sender_username or not sender_password or not receiver_username or not message:
+        st.error("Please fill in all fields.")
+    else:
+        st.info("⏳ Attempting login and message send...")
 
-        with st.spinner("🔐 Logging in..."):
-            cl.login(sender_username, sender_password)
-        st.success("✅ Login successful")
+        with st.status("Logging in...", expanded=True) as status:
+            try:
+                login_start = datetime.datetime.now()
+                cl = Client()
+                cl.delay_range = [2, 5]
+                st.write("Initializing Instagram client...")
+                cl.login(sender_username, sender_password)
+                login_end = datetime.datetime.now()
+                status.update(label=f"✅ Logged in ({login_end - login_start})", state="complete")
 
-        with st.spinner("🔍 Finding recipient..."):
-            user_id = cl.user_id_from_username(recipient_username)
-            time.sleep(random.uniform(1, 2))
+                # Lookup recipient
+                status.update(label="🔍 Finding user ID...")
+                user_id = cl.user_id_from_username(receiver_username)
+                st.write(f"Found user ID: {user_id}")
+                time.sleep(random.uniform(1, 2))
 
-        with st.spinner("✉️ Sending message..."):
-            cl.direct_send(message, user_ids=[user_id])
-            time.sleep(random.uniform(2, 4))
+                # Send message
+                status.update(label="📨 Sending message...")
+                cl.direct_send(message, user_ids=[user_id])
+                time.sleep(random.uniform(2, 4))
+                status.update(label="✅ Message sent successfully!", state="complete")
+                st.success(f"✅ Message sent to @{receiver_username}")
+                st.balloons()
 
-        st.success(f"✅ Message sent to @{recipient_username}")
-        st.balloons()
-
-    except ChallengeRequired:
-        st.error("🔐 Login challenge required. Try logging in via the mobile app first.")
-    except Exception as e:
-        st.error(f"❌ Error: {str(e)}")
-    finally:
-        try:
-            cl.logout()
-        except:
-            pass
+            except ChallengeRequired:
+                status.update(label="🔐 Challenge Required - login via mobile app first.", state="error")
+                st.error("Instagram requires verification. Try logging in via the mobile app first.")
+            except Exception as e:
+                status.update(label="❌ Error during login or message sending.", state="error")
+                st.error(f"Something went wrong: {str(e)}")
