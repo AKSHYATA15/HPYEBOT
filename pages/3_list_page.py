@@ -248,22 +248,16 @@ else:
             
             # Message button - using a unique key per username
                         # Shortlist checkbox instead of DM button
-            if "shortlisted_users" not in st.session_state:
-                st.session_state["shortlisted_users"] = []
+            # Inside your loop in list_page.py
+            shortlist_key = f"shortlist_{row['username']}"
+            if st.checkbox("Shortlist", key=shortlist_key):
+                if "shortlist" not in st.session_state:
+                    st.session_state.shortlist = []
+                if row['username'] not in st.session_state.shortlist:
+                    st.session_state.shortlist.append(row['username'])
 
-            is_shortlisted = any(u["username"] == row["username"] for u in st.session_state["shortlisted_users"])
-
-            if st.checkbox(f"✅ Shortlist @{row['username']}", value=is_shortlisted, key=f"shortlist_chk_{row['username']}"):
-                if not is_shortlisted:
-                    st.session_state["shortlisted_users"].append({"username": row["username"], "niche": row["Niche"]})
-                    st.success(f"@{row['username']} added to shortlist")
-            else:
-                if is_shortlisted:
-                    st.session_state["shortlisted_users"] = [
-                        u for u in st.session_state["shortlisted_users"] if u["username"] != row["username"]
-                    ]
-                    st.info(f"@{row['username']} removed from shortlist")
-
+            
+            
            
        
 
