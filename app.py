@@ -234,8 +234,8 @@ st.markdown('<h1 class="section-title">Start Exploring</h1>', unsafe_allow_html=
 # Platform cards with clickable images
 platform_cols = st.columns(3)
 platforms = [
-    {"name": "Instagram", "image": "assets/Instagram.jpg", "page": "pages/🔍SEARCH PAGE (Instagram + YouTube)"},
-    {"name": "YouTube", "image": "assets/youtube.jpg", "page": "pages/🔍SEARCH PAGE (Instagram + YouTube)"},
+    {"name": "Instagram", "image": "assets/Instagram.jpg", "page": "pages/🔍SEARCH PAGE (Instagram + YouTube).py"},
+    {"name": "YouTube", "image": "assets/youtube.jpg", "page": "pages/🔍SEARCH PAGE (Instagram + YouTube).py"},
     {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/🎵SEARCH PAGE(TikTok).py"}
 ]
 
