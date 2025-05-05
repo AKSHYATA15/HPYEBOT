@@ -178,3 +178,63 @@ st.markdown("""
     Analyze millions of creators across Instagram, YouTube, TikTok and more.</p>
 </div>
 """, unsafe_allow_html=True)
+
+
+
+
+# Feature cards
+st.subheader("✨ Key Features")
+cols = st.columns(3)
+with cols[0]:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Advanced Search</h3>
+        <p>Filter by platform, niche, engagement rate, audience demographics, and more with our powerful search engine.</p>
+    </div>
+    """, unsafe_allow_html=True)
+with cols[1]:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Deep Analytics</h3>
+        <p>Get comprehensive performance metrics, audience insights, and content analysis for every influencer.</p>
+    </div>
+    """, unsafe_allow_html=True)
+with cols[2]:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI Recommendations</h3>
+        <p>Our algorithm learns your preferences to suggest perfect influencer matches for your campaigns.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# New Platform Explorer Section
+st.markdown('<h1 class="section-title">Start Exploring</h1>', unsafe_allow_html=True)
+
+# Platform cards with clickable images
+platform_cols = st.columns(3)
+platforms = [
+    {"name": "Instagram", "image": "assets/Instagram.jpg", "page": "pages/2_search_page.py"},
+    {"name": "YouTube", "image": "assets/youtube.jpg", "page": "pages/2_search_page.py"},
+    {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/tiktok_platform.py"}
+]
+
+platform_cols = st.columns(3)
+for idx, platform in enumerate(platforms):
+    with platform_cols[idx]:
+        st.image(platform["image"],width=200)
+        if st.button(f"Explore {platform['name']} →", key=f"btn_{platform['name']}"):
+            st.switch_page(platform["page"])
+
+# Footer
+st.markdown("---")
+st.markdown("""
+<div style="text-align: center; padding: 2rem 0; color: #666;">
+    <p>© 2023 InfluenceX | Premium Influencer Discovery Platform</p>
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+        <span>Terms</span> | <span>Privacy</span> | <span>Contact</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
