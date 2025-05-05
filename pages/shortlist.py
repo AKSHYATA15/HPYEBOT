@@ -15,14 +15,13 @@ for influencer in st.session_state.shortlisted_influencers:
     with cols[0]:
         st.write(f"**{influencer['username']}**")
     with cols[1]:
-        st.write(f"**Bio:** {influencer['bio'] or 'No bio'}")
-    with cols[2]:
         st.metric("Followers", f"{int(influencer['followers']):,}")
-    with cols[3]:
+    with cols[2]:
         if pd.notna(influencer['subscribers']):
             st.metric("Subscribers", f"{int(influencer['subscribers']):,}")
         else:
             st.metric("Subscribers", "N/A")
+   
             
     with cols[4]:
         st.checkbox("Select for Outreach", key=f"select_{influencer['username']}", 
