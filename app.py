@@ -8,6 +8,11 @@ st.set_page_config(
     page_icon="🔍"
 )
 
+
+
+
+
+
 # CSS (excluding dark sidebar)
 st.markdown(""" 
 <style>
@@ -174,6 +179,14 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+
+st.sidebar.page_link("app.py", label="🏠 HOME", icon="🏠")
+st.sidebar.page_link("pages/search_page.py", label="🔍 SEARCH PAGE(Instagram + Youtube")
+st.sidebar.page_link("pages/list_page.py", label="📋 List Page")
+
+st.sidebar.page_link("pages/outreach.py", label="📤 Outreach")
+st.sidebar.page_link("pages/shortlist.py", label="📌 Shortlist")
+st.sidebar.page_link("pages/tiktok_platform.py", label="🎵 SEARCH PAGE(Tiktok) ")
 
 # Hero Image
 st.image("assets/HOMEPAGE.jpg", use_container_width=True)
