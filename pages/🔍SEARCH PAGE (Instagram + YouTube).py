@@ -117,7 +117,7 @@ if "selected_niche" in st.session_state:
         with type_cols[i % len(type_cols)]:
             if st.button(infl_type, key=f"type_{i}"):
                 st.session_state["selected_category"] = infl_type
-                st.switch_page("pages/3_list_page.py")
+                st.switch_page("pages/📋List Page.py")
 
 st.markdown("---")
 st.subheader("📊 Platform Overview")
