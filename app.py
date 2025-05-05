@@ -170,28 +170,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Sidebar
-with st.sidebar:
-    st.image("https://via.placeholder.com/150x50/1a1a1a/FFFFFF?text=InfluenceX", width=150)
-    st.markdown("""
-    <div style="margin-top: 2rem; margin-bottom: 3rem;">
-        <h3 style="color: white; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">🔍 Navigation</h3>
-        <ul style="list-style: none; padding-left: 0;">
-            <li>🏠 Home</li>
-            <li>🔎 Search Influencers</li>
-            <li>📊 Analytics Dashboard</li>
-            <li>💌 Campaign Manager</li>
-            <li>⚙️ Settings</li>
-        </ul>
-    </div>
-    <div style="margin-top: 3rem;">
-        <h3 style="color: white; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">📌 Quick Actions</h3>
-        <ul style="list-style: none; padding-left: 0;">
-            <li>⭐ Saved Searches</li>
-            <li>🗕️ Recent Views</li>
-            <li>📋 My Lists</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+
 
 # Hero Image - full-width first section
 st.image("assets/HOMEPAGE.jpg", use_container_width=True)
@@ -202,7 +181,9 @@ st.markdown("""
     <h1>Discover Premium Influencers Across All Platforms</h1>
     <p>Unlock the power of data-driven influencer marketing with our comprehensive discovery platform. 
     Analyze millions of creators across Instagram, YouTube, and TikTok in seconds.</p>
-    <button class="cta-button">🚀 Start Exploring Now</button>
+    <a href="/Explore" target="_self">
+        <button class="cta-button">🚀 Start Exploring Now</button>
+    </a>
 </div>
 """, unsafe_allow_html=True)
 
