@@ -181,8 +181,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.sidebar.page_link("app.py", label="🏠 HOME", icon="🏠")
-st.sidebar.page_link("pages/search_page.py", label="🔍 SEARCH PAGE(Instagram + Youtube")
-st.sidebar.page_link("pages/list_page.py", label="📋 List Page")
+st.sidebar.page_link("pages/2_search_page.py", label="🔍 SEARCH PAGE(Instagram + Youtube")
+st.sidebar.page_link("pages/3_list_page.py", label="📋 List Page")
 
 st.sidebar.page_link("pages/outreach.py", label="📤 Outreach")
 st.sidebar.page_link("pages/shortlist.py", label="📌 Shortlist")
