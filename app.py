@@ -8,15 +8,15 @@ st.set_page_config(
     page_icon="🔍"
 )
 
-# Premium dark theme CSS with animations
+# Light theme CSS with removed dark sidebar and platform button
 st.markdown("""
     <style>
     .main {
         background-color: #f8f9fa;
     }
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #000000, #1a1a1a) !important;
-        color: white !important;
+        background: #f8f9fa !important;
+        color: #333 !important;
         padding: 2.5rem 1.5rem !important;
         box-shadow: 5px 0 15px rgba(0,0,0,0.1);
     }
@@ -32,7 +32,7 @@ st.markdown("""
         border-radius: 6px;
     }
     [data-testid="stSidebarNav"] ul li:hover {
-        background: rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.05);
         transform: translateX(5px);
     }
     .hero {
@@ -136,19 +136,6 @@ st.markdown("""
         height: auto;
         display: block;
     }
-    .platform-button {
-        width: 100%;
-        border: none;
-        background: linear-gradient(135deg, #4A80F0, #8E2DE2);
-        color: white;
-        padding: 0.75rem;
-        font-weight: 600;
-        border-radius: 0 0 12px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
     .section-title {
         text-align: center;
         margin: 4rem 0 2rem 0;
@@ -169,11 +156,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Sidebar
-
-
 # Hero Image - full-width first section
-st.image("assets/HOMEPAGE.jpg", use_container_width=True)
+st.image("assets/HOMEPAGE.jpg", use_column_width=True)
 
 # Welcome section - Centered
 st.markdown("""
@@ -181,7 +165,6 @@ st.markdown("""
     <h1>Discover Premium Influencers Across All Platforms</h1>
     <p>Unlock the power of data-driven influencer marketing with our comprehensive discovery platform. 
     Analyze millions of creators across Instagram, YouTube, and TikTok in seconds.</p>
-    
 </div>
 """, unsafe_allow_html=True)
 
@@ -238,9 +221,9 @@ with cols[2]:
     """, unsafe_allow_html=True)
 
 # New Platform Explorer Section
-st.markdown('<h1 class="section-title">Start Exploring</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="section-title">Platforms</h1>', unsafe_allow_html=True)
 
-# Platform cards with clickable images
+# Platform cards (now clickable images without buttons below)
 platform_cols = st.columns(3)
 platforms = [
     {"name": "Instagram", "image": "assets/Instagram.jpg", "page": "pages/2_search_page.py"},
@@ -248,11 +231,9 @@ platforms = [
     {"name": "TikTok", "image": "assets/tiktok.jpg", "page": "pages/tiktok_platform.py"}
 ]
 
-platform_cols = st.columns(3)
 for idx, platform in enumerate(platforms):
     with platform_cols[idx]:
-        st.image(platform["image"],width=200)
-        if st.button(f"Explore {platform['name']} →", key=f"btn_{platform['name']}"):
+        if st.image(platform["image"], use_column_width=True, caption=platform["name"]):
             st.switch_page(platform["page"])
 
 # Footer
