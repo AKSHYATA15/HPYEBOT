@@ -10,6 +10,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+import streamlit.components.v1 as components
+
+components.html("""
+    <script>
+        window.parent.scrollTo(0, 0);
+    </script>
+""", height=0)
+
+
 def inject_custom_css():
     st.markdown("""
     <style>
