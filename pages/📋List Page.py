@@ -50,6 +50,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <div style="position: absolute; top: 1.5rem; right: 2rem; background-color: #f1f3f5; 
+                padding: 0.75rem 1.25rem; border-radius: 8px; color: #333; 
+                font-size: 0.95rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 999;">
+        💡 You can select influencers from the list or send them a DM.<br>
+        After selecting profiles, head to the <strong>Shortlist</strong> page via the sidebar.
+    </div>
+""", unsafe_allow_html=True)
+
+
 def load_data():
     try:
         # Load Instagram data
