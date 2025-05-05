@@ -199,7 +199,7 @@ with cols[0]:
         <div class="feature-container">
         <div class="feature-icon">🔍</div>
         <h3>Advanced Search</h3>
-        <p>Filter by platform, niche, engagement rate, audience demographics, and more with our powerful search engine.</p>
+        <p>Filter by platform, niche, engagement rate, audience demographics,more with our powerful search engine.</p>
     </div>
     </div>
     """, unsafe_allow_html=True)
