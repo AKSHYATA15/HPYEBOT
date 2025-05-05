@@ -252,12 +252,23 @@ else:
             # Message button - using a unique key per username
                         # Shortlist checkbox instead of DM button
             # Inside your loop in list_page.py
-            if st.checkbox("Shortlist", key=f"shortlist_{row['username']}"):
-                if row['username'] not in st.session_state.shortlisted_influencers:
+            if st.checkbox("Shortlist", key=shortlist_key):
+                if "shortlisted_influencers" not in st.session_state:
+                    st.session_state.shortlisted_influencers = []
+
+                
+                # Avoid duplication
+                if not any(inf["username"] == row["username"] for inf in st.session_state.shortlisted_influencers):
+                    # Save full influencer data
                     st.session_state.shortlisted_influencers.append({
-                        "username": row['username'],
-                        "niche": row['Niche']
-                    })
+                        "username": row["username"],
+                        "bio": row.get("bio", ""),
+                        "followers": row.get("followers", 0),
+                        "subscribers": row.get("subscribers", 0),
+                        "Niche": row.get("Niche", ""),
+                        "profile_pic_url": row.get("profile_pic_url", ""),
+                        "youtube_profile_image": row.get("youtube_profile_image", "")    })
+
 
 
             
