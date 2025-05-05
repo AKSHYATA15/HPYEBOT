@@ -10,6 +10,15 @@ df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
 # Set page config
 st.set_page_config(page_title="TikTok Influencer Search", layout="wide",initial_sidebar_state="collapsed")
 
+import streamlit.components.v1 as components
+
+components.html("""
+    <script>
+        window.parent.scrollTo(0, 0);
+    </script>
+""", height=0)
+
+
 # Custom CSS
 st.markdown("""
     <style>
