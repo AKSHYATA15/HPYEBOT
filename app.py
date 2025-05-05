@@ -181,7 +181,7 @@ st.markdown("""
     <h1>Discover Premium Influencers Across All Platforms</h1>
     <p>Unlock the power of data-driven influencer marketing with our comprehensive discovery platform. 
     Analyze millions of creators across Instagram, YouTube, and TikTok in seconds.</p>
-    <a href="/Explore" target="_self">
+    <a href="pages/2_search_page.py" target="_self">
         <button class="cta-button">🚀 Start Exploring Now</button>
     </a>
 </div>
