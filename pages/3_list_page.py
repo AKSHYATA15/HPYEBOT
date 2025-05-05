@@ -252,6 +252,8 @@ else:
             # Message button - using a unique key per username
                         # Shortlist checkbox instead of DM button
             # Inside your loop in list_page.py
+            shortlist_key = f"shortlist_{row['username']}"
+    
             if st.checkbox("Shortlist", key=shortlist_key):
                 if "shortlisted_influencers" not in st.session_state:
                     st.session_state.shortlisted_influencers = []
