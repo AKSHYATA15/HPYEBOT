@@ -97,7 +97,12 @@ if filtered.empty:
     st.warning("No influencers match your selected filters.")
 else:
     for _, row in filtered.iterrows():
-        initials = row['username'][:2].upper()
+        if pd.isna(row['username']) or not isinstance(row['username'], str):
+            initials = "??"  # Set default initials if username is missing or not a string
+        else:
+            initials = row['username'][:2].upper()
+
+        
         colors = ["#6366F1", "#10B981", "#EF4444", "#F59E0B", "#3B82F6", "#EC4899"]
         color = random.choice(colors)
 
