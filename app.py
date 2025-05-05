@@ -73,11 +73,19 @@ st.markdown("""
     transition: all 0.3s ease;
     border: 1px solid rgba(0,0,0,0.05);
     height: 100%;
+    
 }
 .feature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}  
+
+.feature-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
+
 .feature-icon {
     font-size: 2.5rem;
     margin-bottom: 1rem;
@@ -188,25 +196,31 @@ cols = st.columns(3)
 with cols[0]:
     st.markdown("""
     <div class="feature-card">
+        <div class="feature-container">
         <div class="feature-icon">🔍</div>
         <h3>Advanced Search</h3>
         <p>Filter by platform, niche, engagement rate, audience demographics, and more with our powerful search engine.</p>
+    </div>
     </div>
     """, unsafe_allow_html=True)
 with cols[1]:
     st.markdown("""
     <div class="feature-card">
+        <div class="feature-container">
         <div class="feature-icon">📊</div>
         <h3>Deep Analytics</h3>
         <p>Get comprehensive performance metrics, audience insights, and content analysis for every influencer.</p>
+    </div>
     </div>
     """, unsafe_allow_html=True)
 with cols[2]:
     st.markdown("""
     <div class="feature-card">
+        <div class="feature-container">
         <div class="feature-icon">🤖</div>
         <h3>AI Recommendations</h3>
         <p>Our algorithm learns your preferences to suggest perfect influencer matches for your campaigns.</p>
+    </div>
     </div>
     """, unsafe_allow_html=True)
 
